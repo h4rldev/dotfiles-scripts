@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+sink=53
+timeout=300
+
+down() {
+	pamixer --sink $sink -d 5
+	volume=$(pamixer --get-volume)
+	[$volume -gt 0 ] && volume=`expr $volume`  
+	notify-send -t $timeout " $volume%"
+}
+
+up() {
+	pamixer --sink $sink -i 5
+	volume=$(pamixer --get-volume)
+	[ $volume -lt 100 ] && volume=`expr $volume`  
+	notify-send -t $timeout "  $volume%"
+}
+
+mute() {
+	muted="$(pamixer --sink $sink --get-mute)"
+	if $muted; then
+  		pamixer --sink $sink -u
+  		notify-send -t $timeout " UNMUTED"
+	else 
+  		pamixer --sink $sink -m
+  		notify-send -t $timeout " MUTED"
+	fi
+}
+
+case "$1" in
+	up) up;;
+	down) down;;
+	mute) mute;;
+esac
