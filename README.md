@@ -1,7 +1,6 @@
 # h4rl's dotfile scripts
+a bunch of scripts for my dotfiles. 
 
-- a bunch of scripts for my dotfiles. 
-
-## currently features
+### currently features
 
 - volume
