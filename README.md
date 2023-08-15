@@ -1,4 +1,4 @@
-# h4rl's dotfile scripts
+## h4rl's dotfile scripts
 a bunch of scripts for my dotfiles. 
 
 ### currently features
