@@ -4,32 +4,50 @@ sink=53
 timeout=300
 
 down() {
-	pamixer --sink $sink -d 5
-	volume=$(pamixer --get-volume)
-	[$volume -gt 0 ] && volume=`expr $volume`  
-	notify-send -t $timeout " $volume%"
+	pamixer --sink "${sink}" -d 5
+	_volume=$(pamixer --sink "${sink}" --get-volume)
+	notify-send -t "${timeout}" " ${volume}%"
 }
 
 up() {
-	pamixer --sink $sink -i 5
-	volume=$(pamixer --get-volume)
-	[ $volume -lt 100 ] && volume=`expr $volume`  
-	notify-send -t $timeout "  $volume%"
+	pamixer --sink "${sink}" -i 5
+	_volume=$(pamixer --sink "${sink}" --get-volume)
+	notify-send -t "${timeout}" "  ${volume}%"
 }
 
 mute() {
-	muted="$(pamixer --sink $sink --get-mute)"
-	if $muted; then
-  		pamixer --sink $sink -u
-  		notify-send -t $timeout " UNMUTED"
-	else 
-  		pamixer --sink $sink -m
-  		notify-send -t $timeout " MUTED"
+	_muted="$(pamixer --sink "${sink}" --get-mute)"
+	if ${muted}; then
+		pamixer --sink "${sink}" -u
+		notify-send -t "${timeout}" " UNMUTED"
+	else
+		pamixer --sink "${sink}" -m
+		notify-send -t "${timeout}" " MUTED"
 	fi
 }
 
+help() {
+	_usage="volume 0.0.1 by h4rl
+
+A script for changing volume, custom sink, notification daemon and timeout support,
+requires libnotify and pamixer.
+
+usage
+volume up: increases volume by 5
+
+volume down: decreases volume by 5
+
+volume mute: mutes the sink
+
+volume: shows this message
+
+"
+	echo "${_usage}"
+}
+
 case "$1" in
-	up) up;;
-	down) down;;
-	mute) mute;;
+up) up ;;
+down) down ;;
+mute) mute ;;
+*) help ;;
 esac
